@@ -1,21 +1,21 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import {
   Card,
-  Title,
-  Paragraph,
   Chip,
-  FAB,
-  Searchbar,
-  Menu,
   Divider,
+  FAB,
   IconButton,
+  Menu,
+  Paragraph,
+  Searchbar,
   Text,
+  Title,
   useTheme,
 } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRouter } from 'expo-router';
-import { useFocusEffect } from '@react-navigation/native';
 
 import { Application } from '../types';
 
