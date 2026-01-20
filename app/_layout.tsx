@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import { IconButton, MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { GamificationProvider } from './gamification-context';
 
 export const ThemeContext = createContext<{
   isDark: boolean;
@@ -15,21 +16,15 @@ export const ThemeContext = createContext<{
 
 const customLightTheme = {
   ...MD3LightTheme,
-  colors: {
-    ...MD3LightTheme.colors,
-    primary: '#2196F3',
-  },
+  colors: { ...MD3LightTheme.colors, primary: '#2196F3' },
 };
 
 const customDarkTheme = {
   ...MD3DarkTheme,
-  colors: {
-    ...MD3DarkTheme.colors,
-    primary: '#2196F3',
-  },
+  colors: { ...MD3DarkTheme.colors, primary: '#2196F3' },
 };
 
-const ThemeToggle = () => {
+export const ThemeToggle = () => {
   const { isDark, toggleTheme } = useContext(ThemeContext);
   return (
     <IconButton
@@ -62,23 +57,20 @@ export default function RootLayout() {
   return (
     <ThemeContext.Provider value={{ isDark, toggleTheme }}>
       <PaperProvider theme={theme}>
+      <GamificationProvider>
         <StatusBar style={isDark ? 'light' : 'dark'} />
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{
-              title: 'Job Applications',
-              headerRight: () => <ThemeToggle />,
-            }}
-          />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)"  options={{headerShown:false}}/>
           <Stack.Screen
             name="form"
             options={{
+              presentation: 'modal',
               title: 'Application Details',
-              headerRight: () => <ThemeToggle />,
+              headerShown: true,
             }}
           />
         </Stack>
+        </GamificationProvider>
       </PaperProvider>
     </ThemeContext.Provider>
   );

@@ -17,7 +17,7 @@ import {
   useTheme,
 } from 'react-native-paper';
 
-import { Application } from '../types';
+import { Application } from '../../types';
 
 const STORAGE_KEY = '@job_applications';
 
@@ -44,9 +44,7 @@ export default function ListScreen() {
       console.error(e);
     }
   };
-
   useFocusEffect(useCallback(() => { loadData(); }, []));
-
   useEffect(() => {
     let filtered = applications;
 
@@ -141,9 +139,7 @@ export default function ListScreen() {
           </Chip>
         )}
       </View>
-
       <Divider style={styles.divider} />
-
       <FlatList
         data={filteredApps}
         renderItem={renderItem}

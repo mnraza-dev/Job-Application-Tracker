@@ -22,7 +22,6 @@ const INTERVIEW_TYPES = [
   'Phone Screen', 'Technical Round 1', 'Technical Round 2', 'Technical Round 3',
   'HR Round', 'Onsite', 'Other',
 ];
-
 const primaryColor = '#2196F3';
 
 export default function FormScreen() {
@@ -31,31 +30,25 @@ export default function FormScreen() {
   const params = useLocalSearchParams<{ appJson?: string }>();
   const application: Application | undefined = params.appJson ? JSON.parse(params.appJson) : undefined;
   const isEdit = !!application;
-
   const backgroundColor = isDark ? '#000000' : '#ffffff';
   const surfaceColor = isDark ? '#1c1c1c' : '#ffffff';
   const textColor = isDark ? '#ffffff' : '#000000';
   const placeholderColor = isDark ? '#888888' : '#999999';
   const borderColor = isDark ? '#333333' : '#dddddd';
   const subtitleColor = isDark ? '#aaaaaa' : '#666666';
-
   const [company, setCompany] = useState(application?.company ?? '');
   const [position, setPosition] = useState(application?.position ?? '');
   const [customPosition, setCustomPosition] = useState(POSITIONS.includes(application?.position ?? '') ? '' : (application?.position ?? ''));
   const [status, setStatus] = useState<Application['status']>(application?.status ?? 'Applied');
   const [notes, setNotes] = useState(application?.notes ?? '');
   const [interviews, setInterviews] = useState<Interview[]>(application?.interviews ?? []);
-
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [interviewType, setInterviewType] = useState('Phone Screen');
   const [interviewNotes, setInterviewNotes] = useState('');
-
   const [showPositionModal, setShowPositionModal] = useState(false);
   const [showTypeModal, setShowTypeModal] = useState(false);
-
   const displayedPosition = position === 'Other' ? (customPosition || 'Other') : position;
-
   const addInterview = () => {
     if (!selectedDate) return;
     const dateStr = selectedDate.toISOString().split('T')[0];
@@ -64,11 +57,9 @@ export default function FormScreen() {
     setInterviewNotes('');
     setInterviewType('Phone Screen');
   };
-
   const removeInterview = (index: number) => {
     setInterviews(interviews.filter((_, i) => i !== index));
   };
-
   const saveApplication = async () => {
     if (!company.trim() || !displayedPosition.trim()) return;
 
@@ -83,7 +74,6 @@ export default function FormScreen() {
       interviews,
       dateApplied: isEdit ? application!.dateApplied : new Date().toISOString(),
     };
-
     try {
       const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
       let apps: Application[] = jsonValue ? JSON.parse(jsonValue) : [];
@@ -98,14 +88,12 @@ export default function FormScreen() {
       console.error(e);
     }
   };
-
   const renderDropdownItem = ({ item, onSelect }: { item: string; onSelect: (val: string) => void }) => (
     <TouchableOpacity style={styles.dropdownItem} onPress={() => onSelect(item)}>
       <Text style={[styles.dropdownText, { color: textColor }]}>{item}</Text>
       {(position === item || interviewType === item) && <Ionicons name="checkmark" size={24} color={primaryColor} />}
     </TouchableOpacity>
   );
-
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -119,7 +107,6 @@ export default function FormScreen() {
             placeholderTextColor={placeholderColor}
             style={[styles.textInput, { borderColor, color: textColor }]}
           />
-
           {/* Position Dropdown */}
           <Text style={[styles.label, { color: textColor }]}>Position</Text>
           <TouchableOpacity style={[styles.dropdownTrigger, { borderColor }]} onPress={() => setShowPositionModal(true)}>
@@ -128,7 +115,6 @@ export default function FormScreen() {
             </Text>
             <Ionicons name="chevron-down" size={24} color={textColor} />
           </TouchableOpacity>
-
           {position === 'Other' && (
             <>
               <Text style={[styles.label, { color: textColor }]}>Custom Position</Text>
@@ -141,7 +127,6 @@ export default function FormScreen() {
               />
             </>
           )}
-
           {/* Status */}
           <Text style={[styles.label, { color: textColor }]}>Status</Text>
           <View style={styles.statusRow}>
@@ -156,7 +141,6 @@ export default function FormScreen() {
               </TouchableOpacity>
             ))}
           </View>
-
           {/* Notes */}
           <Text style={[styles.label, { color: textColor }]}>General Notes (optional)</Text>
           <TextInput
@@ -167,7 +151,6 @@ export default function FormScreen() {
             multiline
             style={[styles.textInput, styles.multilineInput, { borderColor, color: textColor }]}
           />
-
           {/* Interviews List */}
           <Text style={[styles.sectionTitle, { color: textColor }]}>Interviews</Text>
           {interviews.length === 0 ? (
@@ -187,10 +170,8 @@ export default function FormScreen() {
               ))}
             </View>
           )}
-
           {/* Add Interview Section */}
           <Text style={[styles.sectionTitle, { color: textColor }]}>Add New Interview</Text>
-
           {/* Date Picker */}
           <TouchableOpacity style={[styles.dateTrigger, { borderColor }]} onPress={() => setShowDatePicker(true)}>
             <Ionicons name="calendar" size={24} color={primaryColor} />
@@ -198,14 +179,12 @@ export default function FormScreen() {
               {selectedDate ? selectedDate.toLocaleDateString() : 'Select date'}
             </Text>
           </TouchableOpacity>
-
           {/* Interview Type Dropdown */}
           <Text style={[styles.label, { color: textColor }]}>Interview Type</Text>
           <TouchableOpacity style={[styles.dropdownTrigger, { borderColor }]} onPress={() => setShowTypeModal(true)}>
             <Text style={[styles.dropdownSelected, { color: textColor }]}>{interviewType}</Text>
             <Ionicons name="chevron-down" size={24} color={textColor} />
           </TouchableOpacity>
-
           {/* Interview Notes */}
           <Text style={[styles.label, { color: textColor }]}>Interview Notes (optional)</Text>
           <TextInput
@@ -216,7 +195,6 @@ export default function FormScreen() {
             multiline
             style={[styles.textInput, styles.multilineInput, { borderColor, color: textColor }]}
           />
-
           {/* Add Interview Button */}
           <TouchableOpacity
             style={[styles.actionButton, { opacity: selectedDate ? 1 : 0.5 }]}
@@ -226,7 +204,6 @@ export default function FormScreen() {
             <Ionicons name="add-circle" size={24} color="#fff" />
             <Text style={styles.actionButtonText}>Add Interview</Text>
           </TouchableOpacity>
-
           {/* Save Button */}
           <TouchableOpacity style={styles.saveButton} onPress={saveApplication}>
             <Ionicons name="save" size={24} color="#fff" />
@@ -234,7 +211,6 @@ export default function FormScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-
       {/* Position Modal */}
       <Modal visible={showPositionModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
@@ -253,7 +229,6 @@ export default function FormScreen() {
           </View>
         </View>
       </Modal>
-
       {/* Type Modal */}
       <Modal visible={showTypeModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
@@ -272,7 +247,6 @@ export default function FormScreen() {
           </View>
         </View>
       </Modal>
-
       {/* Date Picker Modal */}
       <Modal visible={showDatePicker} transparent animationType="fade">
         <View style={styles.modalOverlay}>

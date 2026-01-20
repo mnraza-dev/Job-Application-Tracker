@@ -2,20 +2,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useContext, useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
-    BarChart,
-    PieChart,
+  BarChart,
+  PieChart,
 } from 'react-native-chart-kit';
-import { ThemeContext } from './_layout';
-
-import { Application } from '../types';
-
+import { Application } from '../../types';
+import { ThemeContext } from '../_layout';
 const STORAGE_KEY = '@job_applications';
 const screenWidth = Dimensions.get('window').width;
 
 export default function StatsScreen() {
   const { isDark } = useContext(ThemeContext);
   const [applications, setApplications] = useState<Application[]>([]);
-
   const backgroundColor = isDark ? '#000000' : '#ffffff';
   const surfaceColor = isDark ? '#1c1c1c' : '#f8f9fa';
   const textColor = isDark ? '#ffffff' : '#000000';
@@ -38,7 +35,6 @@ export default function StatsScreen() {
     loadData();
   }, []);
 
-  // Calculations
   const total = applications.length;
   const selected = applications.filter(a => a.status === 'Selected').length;
   const successRate = total > 0 ? Math.round((selected / total) * 100) : 0;
